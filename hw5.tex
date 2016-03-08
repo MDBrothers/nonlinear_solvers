@@ -1,0 +1,27 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\author{Michael D. Brothers}
+\title{Homework 5}
+\begin{document}
+
+%{\centering\includegraphics[width=1\textwidth]{pure_nr_x19.pdf}}
+
+\begin{figure}[!tbp]
+  \begin{subfigure}[b]{1\textwidth}
+    \includegraphics[width=\textwidth]{pure_nr_x19.pdf}
+    \caption{Flower one.}
+    \label{fig:f1}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{1\textwidth}
+    \includegraphics[width=\textwidth]{pure_nr_x19.pdf}
+    \caption{Flower two.}
+    \label{fig:f2}
+  \end{subfigure}
+  \caption{My flowers.}
+\end{figure}
+
+\end{document}
