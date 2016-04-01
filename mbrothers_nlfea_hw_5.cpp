@@ -151,7 +151,7 @@ int main(){
   jacobian.zeros(); int_frc.zeros(); d.zeros(); delta_d.zeros();
   ext_frc.zeros();
   const int num_load_steps(40);
-  const double load_increment(0.25), x(0.19), eps_conv(1.E-4), eps_probe(1.E-8);
+  const double load_increment(0.25), x(0.30), eps_conv(1.E-4), eps_probe(1.E-8);
 
   pure:
   /********************************/
@@ -190,14 +190,14 @@ int main(){
         break; //Exit inner loop and re-enter the load step loop because we have succeeded.
       }
       std::cout <<"\titr: " << itr << " res: " << res_nrm << std::endl;
+      /* The residual is undefined, apply more load steps */
       if(res_nrm!=res_nrm)
-      { std::cout << "**** NAN in resdiual eval, skipping" << std::endl;
-      goto moded;}
+      std::cout << "**** NAN in resdiual eval, continuing anyway." << std::endl;
 
-      /* The method as applied has broken down, warn the user  */
+      /* The method as applied has broken down, warn the user but continue applying load steps  */
       if(itr == MAX_ITRS - 1)
-      {std::cout << "**** max num ITRS exceeded, skipping" << std::endl;
-      goto moded;}
+      std::cout << "**** max num ITRS exceeded, applying another loadstep." << std::endl;
+
     }
   }
 
@@ -241,13 +241,11 @@ int main(){
       }
       std::cout <<"\titr: " << itr << " res: " << res_nrm << std::endl;
       if(res_nrm!=res_nrm)
-      {std::cout << "**** NAN in resdiual eval, skipping" << std::endl;
-      goto moded_wls;}
+      std::cout << "**** NAN in resdiual eval, continuing" << std::endl;
 
       /* The method as applied has broken down, warn the user  */
       if(itr == MAX_ITRS - 1)
-      {std::cout << "**** max num ITRS exceeded, skipping" << std::endl;
-      goto moded_wls;}
+      std::cout << "**** max num ITRS exceeded, apply more load steps" << std::endl;
     }
   }
 
@@ -294,8 +292,7 @@ int main(){
         else srch_prm*=1.0/std::sqrt(2.0); //Always try a smaller step.
       }
       if(ln_srch_win == false)
-      {std::cout << "**** line search failed, skipping" << std::endl;
-      goto moded_bfgs;}
+      std::cout << "**** line search failed, going with the last guess" << std::endl;
 
       /* Have we reached an acceptable soln? */
       eval_N(int_frc, d, x);
@@ -307,13 +304,11 @@ int main(){
       }
       std::cout <<"\titr: " << itr << " res: " << res_nrm << std::endl;
       if(res_nrm!=res_nrm)
-      {std::cout << "**** NAN in resdiual eval, skipping" << std::endl;
-      goto moded_bfgs;}
+      std::cout << "**** NAN in resdiual eval, continuing" << std::endl;
 
       /* The method as applied has broken down, warn the user  */
       if(itr == MAX_ITRS - 1)
-      {std::cout << "**** max num ITRS exceeded, skipping" << std::endl;
-      goto moded_bfgs;}
+      std::cout << "**** max num ITRS exceeded, apply more load steps" << std::endl;
     }
   }
 
@@ -401,13 +396,11 @@ int main(){
       }
       std::cout <<"\titr: " << itr << " res: " << res_nrm << std::endl;
       if(res_nrm!=res_nrm)
-      {std::cout << "**** NAN in resdiual eval, skipping" << std::endl;
-      goto moded_bfgs_wls;}
+      std::cout << "**** NAN in resdiual eval, continuing" << std::endl;
 
       /* The method as applied has broken down, warn the user  */
       if(itr == MAX_ITRS - 1)
-      {std::cout << "**** max num ITRS exceeded, skipping" << std::endl;
-      goto moded_bfgs_wls;}
+      std::cout << "**** max num ITRS exceeded, apply more loadsteps" << std::endl;
     }
   }
 
@@ -477,7 +470,7 @@ int main(){
         else srch_prm*=1.0/std::sqrt(2.0); //Always try a smaller step.
       }
       if(ln_srch_win == false)
-      {std::cout << "**** line search failed, skipping" << std::endl; goto end;}
+      std::cout << "**** line search failed, going on with last guess" << std::endl;
 
       /* Store the update information */
       current_R = ext_frc - int_frc;
@@ -503,109 +496,101 @@ int main(){
       }
       std::cout <<"\titr: " << itr << " res: " << res_nrm << std::endl;
       if(res_nrm!=res_nrm)
-      {std::cout << "**** NAN in resdiual eval, skipping" << std::endl;
-      goto end;}
+      std::cout << "**** NAN in resdiual eval, continuing" << std::endl;
 
       /* The method as applied has broken down, warn the user  */
       if(itr == MAX_ITRS - 1)
-      {std::cout << "**** max num ITRS exceeded, skipping" << std::endl;
-      goto end;}
+      std::cout << "**** max num ITRS exceeded, apply more load steps" << std::endl;
     }
   }
 
   end:
 
-  /*output the converged solutions*/
-
+  /*output the numbers generated */
   std::vector<std::string> labels;
   labels.push_back("d_NR");
   labels.push_back("N_NR");
-  writeCSVContents<std::string>("pure_nr_x19.txt", labels, 2);
+  writeCSVContents<std::string>("pure_nr_x30.txt", labels, 2);
   for(const auto & soln : d_pure_NR){
     std::vector<double> record;
     record.push_back( soln[0]);
     d[0] = soln[0]; d[1] = soln[0];
     eval_N(int_frc, d, x);
     record.push_back(int_frc[0]);
-    writeCSVContents<double>("pure_nr_x19.txt",record,2);
+    writeCSVContents<double>("pure_nr_x30.txt",record,2);
   }
-
   labels.clear();
   labels.push_back("num iters pure nr");
-  writeCSVContents<std::string>("pure_nr_x19_conv.txt", labels, 1);
-  writeCSVContents<int>("pure_nr_x19_conv.txt", itrs_pure_NR, 1);
+  writeCSVContents<std::string>("pure_nr_x30_conv.txt", labels, 1);
+  writeCSVContents<int>("pure_nr_x30_conv.txt", itrs_pure_NR, 1);
 
   labels.clear();
   labels.push_back("d_moded_NR");
   labels.push_back("N_moded_NR");
-  writeCSVContents<std::string>("moded_nr_x19.txt", labels, 2);
+  writeCSVContents<std::string>("moded_nr_x30.txt", labels, 2);
   for(const auto & soln : d_moded_NR){
     std::vector<double> record;
     record.push_back( soln[0]);
     d[0] = soln[0]; d[1] = soln[0];
     eval_N(int_frc, d, x);
     record.push_back(int_frc[0]);
-    writeCSVContents<double>("moded_nr_x19.txt",record,2);
+    writeCSVContents<double>("moded_nr_x30.txt",record,2);
   }
-
   labels.clear();
   labels.push_back("num iters moded nr");
-  writeCSVContents<std::string>("moded_nr_x19_conv.txt", labels, 1);
-  writeCSVContents<int>("moded_nr_x19_conv.txt", itrs_moded_NR, 1);
+  writeCSVContents<std::string>("moded_nr_x30_conv.txt", labels, 1);
+  writeCSVContents<int>("moded_nr_x30_conv.txt", itrs_moded_NR, 1);
 
   labels.clear();
   labels.push_back("d_moded_NR_wls");
   labels.push_back("N_moded_NR_wls");
-  writeCSVContents<std::string>("moded_nr_wls_x19.txt", labels, 2);
+  writeCSVContents<std::string>("moded_nr_wls_x30.txt", labels, 2);
   for(const auto & soln : d_moded_NR_wls){
     std::vector<double> record;
     record.push_back( soln[0]);
     d[0] = soln[0]; d[1] = soln[0];
     eval_N(int_frc, d, x);
     record.push_back(int_frc[0]);
-    writeCSVContents<double>("moded_nr_wls_x19.txt",record,2);
+    writeCSVContents<double>("moded_nr_wls_x30.txt",record,2);
   }
-
   labels.clear();
   labels.push_back("num iters moded nr wls");
-  writeCSVContents<std::string>("moded_nr_wls_x19_conv.txt", labels, 1);
-  writeCSVContents<int>("moded_nr_wls_x19_conv.txt", itrs_moded_NR_wls, 1);
+  writeCSVContents<std::string>("moded_nr_wls_x30_conv.txt", labels, 1);
+  writeCSVContents<int>("moded_nr_wls_x30_conv.txt", itrs_moded_NR_wls, 1);
 
   labels.clear();
   labels.push_back("d_moded_NR_BFGS");
   labels.push_back("N_moded_NR_BFGS");
-  writeCSVContents<std::string>("moded_nr_bfgs_x19.txt", labels, 2);
+  writeCSVContents<std::string>("moded_nr_bfgs_x30.txt", labels, 2);
   for(const auto & soln : d_moded_NR_BFGS){
     std::vector<double> record;
     record.push_back( soln[0]);
     d[0] = soln[0]; d[1] = soln[0];
     eval_N(int_frc, d, x);
     record.push_back(int_frc[0]);
-    writeCSVContents<double>("moded_nr_bfgs_x19.txt",record,2);
+    writeCSVContents<double>("moded_nr_bfgs_x30.txt",record,2);
   }
-
   labels.clear();
   labels.push_back("num iters moded nr bfgs");
-  writeCSVContents<std::string>("moded_nr_bfgs_x19_conv.txt", labels, 1);
-  writeCSVContents<int>("moded_nr_bfgs_x19_conv.txt", itrs_moded_NR_BFGS, 1);
+  writeCSVContents<std::string>("moded_nr_bfgs_x30_conv.txt", labels, 1);
+  writeCSVContents<int>("moded_nr_bfgs_x30_conv.txt", itrs_moded_NR_BFGS, 1);
 
   labels.clear();
   labels.push_back("d_moded_NR_BFGS_wls");
   labels.push_back("N_moded_NR_BFGS_wls");
-  writeCSVContents<std::string>("moded_nr_bfgs_wls_x19.txt", labels, 2);
+  writeCSVContents<std::string>("moded_nr_bfgs_wls_x30.txt", labels, 2);
   for(const auto & soln : d_moded_NR_BFGS_wls){
     std::vector<double> record;
     record.push_back( soln[0]);
     d[0] = soln[0]; d[1] = soln[0];
     eval_N(int_frc, d, x);
     record.push_back(int_frc[0]);
-    writeCSVContents<double>("moded_nr_bfgs_wls_x19.txt",record,2);
+    writeCSVContents<double>("moded_nr_bfgs_wls_x30.txt",record,2);
   }
-
   labels.clear();
   labels.push_back("num iters moded nr bfgs wls");
-  writeCSVContents<std::string>("moded_nr_bfgs_wls_x19_conv.txt", labels, 1);
-  writeCSVContents<int>("moded_nr_bfgs_wls_x19_conv.txt", itrs_moded_NR_BFGS_wls, 1);
+  writeCSVContents<std::string>("moded_nr_bfgs_wls_x30_conv.txt", labels, 1);
+  writeCSVContents<int>("moded_nr_bfgs_wls_x30_conv.txt", itrs_moded_NR_BFGS_wls, 1);
 
   return 0;
 }
