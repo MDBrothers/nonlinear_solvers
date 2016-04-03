@@ -195,10 +195,12 @@ int main(){
       std::cout << "**** NAN in resdiual eval, continuing anyway." << std::endl;
 
       /* The method as applied has broken down, warn the user but continue applying load steps  */
-      if(itr == MAX_ITRS - 1)
-      std::cout << "**** max num ITRS exceeded, applying another loadstep." << std::endl;
-
-    }
+      if(itr == MAX_ITRS - 1){
+      	std::cout << "**** max num ITRS exceeded, applying another loadstep." << std::endl;
+				save_soln(d_pure_NR, d);
+				itrs_pure_NR.push_back(itr + 1);
+			}
+		}
   }
 
   moded:
@@ -244,8 +246,8 @@ int main(){
       std::cout << "**** NAN in resdiual eval, continuing" << std::endl;
 
       /* The method as applied has broken down, warn the user  */
-      if(itr == MAX_ITRS - 1)
-      std::cout << "**** max num ITRS exceeded, apply more load steps" << std::endl;
+      if(itr == MAX_ITRS - 1){
+      	std::cout << "**** max num ITRS exceeded, apply more load steps" << std::endl;
     }
   }
 
