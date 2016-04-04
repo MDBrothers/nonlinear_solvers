@@ -2,6 +2,8 @@
 import numpy as np
 import matplotlib as mpl
 from scipy.optimize import bisect
+from tabulate import tabulate
+
 
 mpl.use('pgf')
 
@@ -36,6 +38,9 @@ mpl.rcParams.update(pgf_with_latex)
 
 import matplotlib.pyplot as plt
 
+def N_explicit(myd1, x):
+    return x*np.power(myd1,3.0) -2.0*np.power(myd1, 2.0) +5.6*myd1
+
 # I make my own newfig and savefig functions
 def newfig(width):
     plt.clf()
@@ -56,7 +61,16 @@ moded_nr_wls_x19 = np.loadtxt("moded_nr_wls_x19.txt",delimiter=",",skiprows=1,nd
 moded_nr_bfgs_x19 = np.loadtxt("moded_nr_bfgs_x19.txt",delimiter=",",skiprows=1,ndmin=2)
 moded_nr_bfgs_wls_x19 = np.loadtxt("moded_nr_bfgs_wls_x19.txt",delimiter=",",skiprows=1,ndmin=2)
 
+
+header = ["pure d", "pure N","modified d", "modified N","modified wls d", "modified wls N","BFGS d", "BFGS N","BFGS wls d", "BFGS wls N"]
+content = np.array([pure_nr_x19[:,0], pure_nr_x19[:,1], moded_nr_x19[:,0], moded_nr_x19[:,1], moded_nr_wls_x19[:,0], moded_nr_wls_x19[:,1], moded_nr_bfgs_x19[:,0], moded_nr_bfgs_x19[:,1], moded_nr_bfgs_wls_x19[:,0], moded_nr_bfgs_wls_x19[:,1]], ndmin=2)
+print "\\begin{figure}"
+print tabulate(content.transpose(), header, tablefmt="latex")
+print "\\caption{Solution approximations, $x=.19$}"
+print "\\end{figure}"
+
 ax.scatter(pure_nr_x19[:,0], pure_nr_x19[:,1])
+ax.plot(np.linspace(0,8.0, 100), N_explicit(np.linspace(0,8.0,100), .19))
 ax.set_xlabel('d1')
 ax.set_ylabel('N1')
 ax.set_title('Pure NR, x=.19')
@@ -64,6 +78,7 @@ savefig('pure_nr_x19')
 
 ax.clear()
 ax.scatter(moded_nr_x19[:,0], moded_nr_x19[:,1])
+ax.plot(np.linspace(0,8.0, 100), N_explicit(np.linspace(0,8.0,100), .19))
 ax.set_xlabel('d1')
 ax.set_ylabel('N1')
 ax.set_title('Modified NR, x=.19')
@@ -71,6 +86,7 @@ savefig('moded_nr_x19')
 
 ax.clear()
 ax.scatter( moded_nr_wls_x19[:,0], moded_nr_wls_x19[:,1])
+ax.plot(np.linspace(0,8.0, 100), N_explicit(np.linspace(0,8.0,100), .19))
 ax.set_xlabel('d1')
 ax.set_ylabel('N1')
 ax.set_title('Modified NR with Line Search, x=.19')
@@ -78,6 +94,7 @@ savefig('moded_nr_wls_x19')
 
 ax.clear()
 ax.scatter(moded_nr_bfgs_x19[:,0], moded_nr_bfgs_x19[:,1])
+ax.plot(np.linspace(0,8.0, 100), N_explicit(np.linspace(0,8.0,100), .19))
 ax.set_xlabel('d1')
 ax.set_ylabel('N1')
 ax.set_title('Modified NR with BFGS, x=.19')
@@ -85,6 +102,7 @@ savefig('moded_nr_bfgs_x19')
 
 ax.clear()
 ax.scatter( moded_nr_bfgs_wls_x19[:,0], moded_nr_bfgs_wls_x19[:,1])
+ax.plot(np.linspace(0,8.0, 100), N_explicit(np.linspace(0,8.0,100), .19))
 ax.set_xlabel('d1')
 ax.set_ylabel('N1')
 ax.set_title('Modified BR with BFGS and Line Search, x=.19')
@@ -97,8 +115,16 @@ moded_nr_wls_x30 = np.loadtxt("moded_nr_wls_x30.txt",delimiter=",",skiprows=1,nd
 moded_nr_bfgs_x30 = np.loadtxt("moded_nr_bfgs_x30.txt",delimiter=",",skiprows=1,ndmin=2)
 moded_nr_bfgs_wls_x30 = np.loadtxt("moded_nr_bfgs_wls_x30.txt",delimiter=",",skiprows=1,ndmin=2)
 
+header = ["pure d", "pure N","modified d", "modified N","modified wls d", "modified wls N","BFGS d", "BFGS N","BFGS wls d", "BFGS wls N"]
+content = np.array([pure_nr_x30[:,0], pure_nr_x30[:,1], moded_nr_x30[:,0], moded_nr_x30[:,1], moded_nr_wls_x30[:,0], moded_nr_wls_x30[:,1], moded_nr_bfgs_x30[:,0], moded_nr_bfgs_x30[:,1], moded_nr_bfgs_wls_x30[:,0], moded_nr_bfgs_wls_x30[:,1]], ndmin=2)
+print "\\begin{figure}"
+print tabulate(content.transpose(), header, tablefmt="latex")
+print "\\caption{Solution approximations, $x=.30$}"
+print "\\end{figure}"
+
 ax.clear()
 ax.scatter(pure_nr_x30[:,0], pure_nr_x30[:,1])
+ax.plot(np.linspace(0,4.5, 100), N_explicit(np.linspace(0,4.5,100), .30))
 ax.set_xlabel('d1')
 ax.set_ylabel('N1')
 ax.set_title('Pure NR, x=.30')
@@ -106,6 +132,7 @@ savefig('pure_nr_x30')
 
 ax.clear()
 ax.scatter(moded_nr_x30[:,0], moded_nr_x30[:,1])
+ax.plot(np.linspace(0,4.5, 100), N_explicit(np.linspace(0,4.5,100), .30))
 ax.set_xlabel('d1')
 ax.set_ylabel('N1')
 ax.set_title('Modified NR, x=.30')
@@ -113,6 +140,7 @@ savefig('moded_nr_x30')
 
 ax.clear()
 ax.scatter( moded_nr_wls_x30[:,0], moded_nr_wls_x30[:,1])
+ax.plot(np.linspace(0,4.5, 100), N_explicit(np.linspace(0,4.5,100), .30))
 ax.set_xlabel('d1')
 ax.set_ylabel('N1')
 ax.set_title('Modified NR with Line Search, x=.30')
@@ -120,6 +148,7 @@ savefig('moded_nr_wls_x30')
 
 ax.clear()
 ax.scatter(moded_nr_bfgs_x30[:,0], moded_nr_bfgs_x30[:,1])
+ax.plot(np.linspace(0,4.5, 100), N_explicit(np.linspace(0,4.5,100), .30))
 ax.set_xlabel('d1')
 ax.set_ylabel('N1')
 ax.set_title('Modified NR with BFGS, x=.30')
@@ -127,6 +156,7 @@ savefig('moded_nr_bfgs_x30')
 
 ax.clear()
 ax.scatter( moded_nr_bfgs_wls_x30[:,0], moded_nr_bfgs_wls_x30[:,1])
+ax.plot(np.linspace(0,4.5, 100), N_explicit(np.linspace(0,4.5,100), .30))
 ax.set_xlabel('d1')
 ax.set_ylabel('N1')
 ax.set_title('Modified BR with BFGS and Line Search, x=.30')
@@ -138,6 +168,13 @@ moded_nr_x19_conv = np.loadtxt("moded_nr_x19_conv.txt",delimiter=",",skiprows=1,
 moded_nr_wls_x19_conv = np.loadtxt("moded_nr_wls_x19_conv.txt",delimiter=",",skiprows=1,ndmin=2)
 moded_nr_bfgs_x19_conv = np.loadtxt("moded_nr_bfgs_x19_conv.txt",delimiter=",",skiprows=1,ndmin=2)
 moded_nr_bfgs_wls_x19_conv = np.loadtxt("moded_nr_bfgs_wls_x19_conv.txt",delimiter=",",skiprows=1,ndmin=2)
+
+header = ["pure","modified","modified wls","BFGS","BFGS wls"]
+content = np.array([pure_nr_x19_conv[:], moded_nr_x19_conv[:], moded_nr_wls_x19_conv[:], moded_nr_bfgs_x19_conv[:], moded_nr_bfgs_wls_x19_conv[:]], ndmin=2)
+print "\\begin{figure}"
+print tabulate(content, header, tablefmt="latex")
+print "\\caption{Number of iterations, $x=.19$}"
+print "\\end{figure}"
 
 ax.clear()
 ax.scatter( range(1,len(pure_nr_x19_conv)+1), pure_nr_x19_conv)
@@ -175,11 +212,24 @@ ax.set_title('Modified BR with BFGS and Line Search, x=.19')
 savefig('moded_nr_bfgs_wls_x19_conv')
 
 
-pure_nr_x30_conv = np.loadtxt("pure_nr_x30_conv.txt",delimiter=",",skiprows=1,ndmin=2)
-moded_nr_x30_conv = np.loadtxt("moded_nr_x30_conv.txt",delimiter=",",skiprows=1,ndmin=2)
-moded_nr_wls_x30_conv = np.loadtxt("moded_nr_wls_x30_conv.txt",delimiter=",",skiprows=1,ndmin=2)
-moded_nr_bfgs_x30_conv = np.loadtxt("moded_nr_bfgs_x30_conv.txt",delimiter=",",skiprows=1,ndmin=2)
-moded_nr_bfgs_wls_x30_conv = np.loadtxt("moded_nr_bfgs_wls_x30_conv.txt",delimiter=",",skiprows=1,ndmin=2)
+pure_nr_x30_conv = np.loadtxt("pure_nr_x30_conv.txt",delimiter=",",skiprows=1,ndmin=1)
+moded_nr_x30_conv = np.loadtxt("moded_nr_x30_conv.txt",delimiter=",",skiprows=1,ndmin=1)
+moded_nr_wls_x30_conv = np.loadtxt("moded_nr_wls_x30_conv.txt",delimiter=",",skiprows=1,ndmin=1)
+moded_nr_bfgs_x30_conv = np.loadtxt("moded_nr_bfgs_x30_conv.txt",delimiter=",",skiprows=1,ndmin=1)
+moded_nr_bfgs_wls_x30_conv = np.loadtxt("moded_nr_bfgs_wls_x30_conv.txt",delimiter=",",skiprows=1,ndmin=1)
+
+header = ["pure","modified","modified wls","BFGS","BFGS wls"]
+content = np.ndarray(shape =(40,5))
+content[:,0] = pure_nr_x30_conv
+content[:,1] = moded_nr_x30_conv
+content[:,2] = moded_nr_wls_x30_conv
+content[:,3] = moded_nr_bfgs_x30_conv
+content[:,4] = moded_nr_bfgs_wls_x30_conv
+
+print "\\begin{figure}"
+print tabulate(content, header, tablefmt="latex")
+print "\\caption{Number of iterations, $x=.30$}"
+print "\\end{figure}"
 
 ax.clear()
 ax.scatter( range(1,len(pure_nr_x30_conv)+1), pure_nr_x30_conv )
@@ -216,41 +266,15 @@ ax.set_ylabel('Num Iterations')
 ax.set_title('Modified BR with BFGS and Line Search, x=.30')
 savefig('moded_nr_bfgs_wls_x30_conv')
 
-def N19_opt(myd1, myload):
-    return myload - (0.19*myd1*myd1*myd1 -2.0*myd1*myd1 + 5.6*myd1)
-
-def N30_opt(myd1, myload):
-    return myload - (0.30*myd1*myd1*myd1 -2.0*myd1*myd1 + 5.6*myd1)
-
-def N19_scatter(myd1):
-    return 0.19*myd1*myd1*myd1 -2.0*myd1*myd1 +5.6*myd1
-
-def N30_scatter(myd1):
-    return 0.30*myd1*myd1*myd1 -2.0*myd1*myd1 +5.6*myd1
-
-loads = np.linspace(.25, 40.0*.25, num=40)
-n19_d = []
-n30_d = []
-
-for load in loads:
-    n19_d.append( (bisect(N19_opt, -15.0,15.0, args=(load,) )) )
-    n30_d.append( (bisect(N30_opt, -15.0,15.0, args=(load,) )) )
-
-n19_d = np.array(n19_d)
-n30_d = np.array(n30_d)
-
-n19_n = N19_scatter(n19_d)
-n30_n = N30_scatter(n30_d)
-
 ax.clear()
-ax.scatter(n19_d, n19_n)
+ax.plot(np.linspace(0,8.0, 100), N_explicit(np.linspace(0,8.0,100), .19))
 ax.set_xlabel('d1')
 ax.set_ylabel('N1')
 ax.set_title('Exact N1 vs d1, x=.19')
 savefig('exact_x19')
 
 ax.clear()
-ax.scatter(n30_d, n30_n)
+ax.plot(np.linspace(0,4.5, 100), N_explicit(np.linspace(0,4.5,100), .30))
 ax.set_xlabel('d1')
 ax.set_ylabel('N1')
 ax.set_title('Exact N1 vs d1, x=.30')

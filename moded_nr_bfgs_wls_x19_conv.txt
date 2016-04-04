@@ -17,6 +17,12 @@ num iters moded nr bfgs wls
 3
 4
 4
+14
+14
+14
+14
+14
+14
 2
 3
 3
