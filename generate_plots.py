@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import numpy as np
 import matplotlib as mpl
-from scipy.optimize import bisect
 from tabulate import tabulate
 
 
@@ -163,14 +162,20 @@ ax.set_title('Modified BR with BFGS and Line Search, x=.30')
 savefig('moded_nr_bfgs_wls_x30')
 
 ax.clear()
-pure_nr_x19_conv = np.loadtxt("pure_nr_x19_conv.txt",delimiter=",",skiprows=1,ndmin=2)
-moded_nr_x19_conv = np.loadtxt("moded_nr_x19_conv.txt",delimiter=",",skiprows=1,ndmin=2)
-moded_nr_wls_x19_conv = np.loadtxt("moded_nr_wls_x19_conv.txt",delimiter=",",skiprows=1,ndmin=2)
-moded_nr_bfgs_x19_conv = np.loadtxt("moded_nr_bfgs_x19_conv.txt",delimiter=",",skiprows=1,ndmin=2)
-moded_nr_bfgs_wls_x19_conv = np.loadtxt("moded_nr_bfgs_wls_x19_conv.txt",delimiter=",",skiprows=1,ndmin=2)
+pure_nr_x19_conv = np.loadtxt("pure_nr_x19_conv.txt",delimiter=",",skiprows=1,ndmin=1)
+moded_nr_x19_conv = np.loadtxt("moded_nr_x19_conv.txt",delimiter=",",skiprows=1,ndmin=1)
+moded_nr_wls_x19_conv = np.loadtxt("moded_nr_wls_x19_conv.txt",delimiter=",",skiprows=1,ndmin=1)
+moded_nr_bfgs_x19_conv = np.loadtxt("moded_nr_bfgs_x19_conv.txt",delimiter=",",skiprows=1,ndmin=1)
+moded_nr_bfgs_wls_x19_conv = np.loadtxt("moded_nr_bfgs_wls_x19_conv.txt",delimiter=",",skiprows=1,ndmin=1)
 
 header = ["pure","modified","modified wls","BFGS","BFGS wls"]
-content = np.array([pure_nr_x19_conv[:], moded_nr_x19_conv[:], moded_nr_wls_x19_conv[:], moded_nr_bfgs_x19_conv[:], moded_nr_bfgs_wls_x19_conv[:]], ndmin=2)
+content = np.ndarray(shape =(40,5))
+content[:,0] = pure_nr_x19_conv
+content[:,1] = moded_nr_x19_conv
+content[:,2] = moded_nr_wls_x19_conv
+content[:,3] = moded_nr_bfgs_x19_conv
+content[:,4] = moded_nr_bfgs_wls_x19_conv
+
 print "\\begin{figure}"
 print tabulate(content, header, tablefmt="latex")
 print "\\caption{Number of iterations, $x=.19$}"
